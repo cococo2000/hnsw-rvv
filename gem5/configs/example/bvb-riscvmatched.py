@@ -52,11 +52,11 @@ board = RISCVMatchedBoard()
 # board.set_se_binary_workload(
 #     obtain_resource("riscv-hello", resource_version="1.0.0")
 # )
-# binary_path = "/home/zxge/VDB/hnsw/build/bin/hnsw_search_riscv"
-binary_path = "/home/zxge/VDB/hnsw/hnsw_search_sifive"
-# binary_path = "/home/zxge/VDB/hnsw/test/test_rv"
-# binary_path = "/home/zxge/VDB/hnsw/test/test_rvv"
-# binary_path = "/home/zxge/VDB/hnsw/test/test"
+# binary_path = "~/VDB/hnsw/build/bin/hnsw_search_riscv"
+binary_path = "~/VDB/hnsw/hnsw_search_sifive"
+# binary_path = "~/VDB/hnsw/test/test_rv"
+# binary_path = "~/VDB/hnsw/test/test_rvv"
+# binary_path = "~/VDB/hnsw/test/test"
 binary = BinaryResource(binary_path)
 board.set_se_binary_workload(binary)
 

@@ -12,3 +12,6 @@ g++ -O2 --static test_rvv.cpp ../utils/dataset.cpp -o test_x86
 
 
 # /opt/riscv/bin/riscv64-unknown-linux-gnu-g++ -O2 --static test.cpp ../utils/dataset.cpp -o test
+
+/opt/Xuantie-900-gcc-linux-6.6.0-glibc-x86_64-V3.0.1/bin/riscv64-unknown-linux-gnu-g++ -O2 -mcpu=c908v --static -DUSE_RVV test_rvv.cpp ../utils/dataset.cpp -o test_rvv_xuantie
+/opt/Xuantie-900-gcc-linux-6.6.0-glibc-x86_64-V3.0.1/bin/riscv64-unknown-linux-gnu-g++ -O2 -mcpu=c908v --static           test_rvv.cpp ../utils/dataset.cpp -o test_rv_xuantie

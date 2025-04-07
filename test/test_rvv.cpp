@@ -87,7 +87,7 @@ int main() {
     int dataset_dim;
     int train_elements, test_elements, dataset_topk;
     float *av, *bv, *neighbors, *distances;
-    read_bin("/home/zxge/VDB/hnsw/data/random-xs-32-euclidean.bin", dataset_dim, train_elements, test_elements, dataset_topk, av, bv, neighbors, distances);
+    read_bin("../data/random-xs-32-euclidean.bin", dataset_dim, train_elements, test_elements, dataset_topk, av, bv, neighbors, distances);
     int cycle = std::min(train_elements, test_elements);
     size_t dim = (size_t) dataset_dim;
     result = 0.0;

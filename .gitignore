@@ -19,6 +19,7 @@ hnsw_search_sifive
 .idea/
 *.swp
 *.swo
+__pycache__/
 
 # Data files
 data/
@@ -29,3 +30,5 @@ data/
 # Temporary files
 *.tmp
 *.temp
+
+*.tar.gz

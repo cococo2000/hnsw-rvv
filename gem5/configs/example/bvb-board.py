@@ -121,8 +121,7 @@ board = RISCVMatchedBoard(
 # print("Board:", board)
 
 # binary = obtain_resource(args.resource)
-# binary_path = "/home/zxge/VDB/hnsw/hnswlib/examples/cpp/gzx_search_riscv"
-# binary_path = "/home/zxge/VDB/hnsw/test/test_rvv"
+# binary_path = "../test/test_rvv"
 # binary_path = "../build/bin/hnsw_search_riscv_rvv"
 
 

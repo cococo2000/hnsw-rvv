@@ -62,8 +62,8 @@ system.system_port = system.membus.cpu_side_ports
 #     "../../../",
 #     "tests/test-progs/hello/bin/riscv/linux/hello",
 # )
-# binary = "/home/zxge/VDB/hnsw/hnswlib/examples/cpp/gzx_search_riscv"
-binary = "/home/zxge/VDB/hnsw/build/bin/hnsw_search_riscv_rvv"
+# binary = "~/VDB/hnsw/hnswlib/examples/cpp/gzx_search_riscv"
+binary = "~/VDB/hnsw/build/bin/hnsw_search_riscv_rvv"
 
 system.workload = SEWorkload.init_compatible(binary)
 

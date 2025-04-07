@@ -60,7 +60,7 @@ for vlen in "${vlens[@]}"; do
             TEST_NAME="${DATASET_NAME}-top${topk}"
             M5OUT_DIR="${OUTPUT_DIR}/m5out-rvv-${TEST_NAME}"
             LOG_FILE="${LOGS_DIR}/rvv-${TEST_NAME}.log"
-            DATASET_PATH="/home/zxge/VDB/hnsw/data/${DATASET_NAME}.bin"
+            DATASET_PATH="${BASE_DIR}/data/${DATASET_NAME}.bin"
 
             (
                 echo "Running rvv test for dimension $dim and topk $topk..."
@@ -103,4 +103,4 @@ wait
 
 echo "All tests completed."
 
-# time build/RISCV/gem5.opt --outdir=../m5out-rv256 configs/example/bvb-board.py --vlen 1024 --resource ../build/bin/hnsw_search_riscv --prog_args="--topk 100 --dataset /home/zxge/VDB/hnsw/data/random-euclidean-512-1000-100.bin" 
+# time build/RISCV/gem5.opt --outdir=../m5out-rv256 configs/example/bvb-board.py --vlen 1024 --resource ../build/bin/hnsw_search_riscv --prog_args="--topk 100 --dataset ${BASE_DIR}/data/random-euclidean-512-1000-100.bin" 

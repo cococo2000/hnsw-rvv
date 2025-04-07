@@ -131,7 +131,7 @@ int main(int argc, char **argv)
     int M = 8;                 // Parameter affecting internal connectivity and memory consumption
     int ef_construction = 200; // Controls search/indexing speed trade-off
     int topk = 1;              // Default topk value
-    std::string dataset_name = "/home/zxge/VDB/hnsw/data/random-xs-32-euclidean.bin";
+    std::string dataset_name = "./data/random-xs-32-euclidean.bin";
 
     // Parse command line arguments
     if (parse_arguments(argc, argv, topk, M, ef_construction, dataset_name) != 0)
