@@ -28,9 +28,9 @@ dimensions=(8 16 32 64 128 256 512 1024 2048 3072 4096) # 12
 # dimensions=(8 16 32 64 128 256 512 1024 2048 4096)
 # dimensions=(512 1024)
 # dimensions=(8 16 32 64 128 256 2048 3072 4096)
-topks=(1 5 10 50 100)
+# topks=(1 5 10 50 100)
 # topks=(1 5 10 50)
-# topks=(100)
+topks=(100)
 train=1000
 test=100
 
@@ -41,12 +41,12 @@ elen=64
 l1d_size="64KiB"
 
 # Define base directories
-BASE_DIR="../"
+BASE_DIR=".."
 
 for vlen in "${vlens[@]}"; do
     # Create directories if they don't exist
-    LOGS_DIR="${BASE_DIR}rvv-logs-vlen${vlen}-elen${elen}"
-    OUTPUT_DIR="${BASE_DIR}rvv-output-vlen${vlen}-elen${elen}"
+    LOGS_DIR="${BASE_DIR}/rvv-logs-vlen${vlen}-elen${elen}"
+    OUTPUT_DIR="${BASE_DIR}/rvv-output-vlen${vlen}-elen${elen}"
 
     for dir in "${LOGS_DIR}" "${OUTPUT_DIR}"; do
         if [ ! -d "${dir}" ]; then

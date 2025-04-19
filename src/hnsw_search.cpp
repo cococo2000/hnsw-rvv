@@ -198,12 +198,12 @@ int main(int argc, char **argv)
     // %%%%%%%% Time measurement %%%%%%%%
     do_search(alg_hnsw, test_data, test_elements, dim, topk);
     // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    // %%%%%%%% Recall measurement %%%%%%%%
-    // evaluate_search_quality(alg_hnsw, test_data, neighbors, test_elements, dim, topk, dataset_topk);
-    // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     end = std::chrono::high_resolution_clock::now();
     duration = std::chrono::duration_cast<std::chrono::microseconds>(end - start).count();
     std::cout << ">>> Time to search: " << duration / 1000.0 << " ms\n";
+    // %%%%%%%% Recall measurement %%%%%%%%
+    // evaluate_search_quality(alg_hnsw, test_data, neighbors, test_elements, dim, topk, dataset_topk);
+    // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
     delete alg_hnsw;
     return 0;

@@ -19,7 +19,7 @@ def parse_parent_directory_name(dir_name):
 def parse_directory_name(dir_name):
     """Parse the directory name to extract configuration parameters."""
     # Example: m5out-rv-random-euclidean-8-1000-100-top1
-    pattern = r'm5out-(rv|rvv)-(\w+)-(\w+)-(\d+)-(\d+)-(\d+)-top(\d+)'
+    pattern = r'm5out-(rv|rvv|hifive)-(\w+)-(\w+)-(\d+)-(\d+)-(\d+)-top(\d+)'
     match = re.match(pattern, dir_name)
     if match:
         return {

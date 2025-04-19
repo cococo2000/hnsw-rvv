@@ -25,15 +25,27 @@ int main()
     int test_elements = 100;
     int topk = 1;
 
+    // Prompt user for input HDF5 file name
+    std::string file_name;
+    std::cout << "Enter the input HDF5 file name (default: ./data/random-xs-32-euclidean.hdf5): ";
+    std::getline(std::cin, file_name);
+    if (file_name.empty())
+    {
+        file_name = "./data/random-xs-32-euclidean.hdf5";
+    }
+    std::cout << "Input file name: " << file_name << "\n";
+
     // Read data from HDF5 file
-    std::string file_name = "./data/random-xs-32-euclidean.hdf5";
     float *train_data = read_hdf5(file_name, "train", train_elements, dim);
     float *test_data = read_hdf5(file_name, "test", test_elements, dim);
     float *neighbors = read_hdf5(file_name, "neighbors", test_elements, topk);
     float *distances = read_hdf5(file_name, "distances", test_elements, topk);
 
+    // Generate output binary file name based on input file name
+    std::string binary_file_name = file_name.substr(0, file_name.find_last_of('.')) + ".bin";
+
     // Store the data in a binary file
-    std::string binary_file_name = "./data/random-xs-32-euclidean.bin";
+    std::cout << "Output binary file: " << binary_file_name << "\n";
     write_bin(binary_file_name, dim, train_elements, test_elements, topk, train_data, test_data, neighbors, distances);
 
     // Test reading the binary file

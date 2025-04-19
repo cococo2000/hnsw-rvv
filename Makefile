@@ -70,30 +70,32 @@ $(BIN_DIR)/%: src/%.cpp $(SOURCES_UTILS)
 # Rule for object files
 	$(CXX) $(CXXFLAGS) -o $@ $^ $(LDFLAGS)
 # Compile with different SIMD instruction sets
-	$(CXX) $(CXXFLAGS) -msse -o $@_sse $^ $(LDFLAGS)
-	$(CXX) $(CXXFLAGS) -mavx -o $@_avx $^ $(LDFLAGS)
+# $(CXX) $(CXXFLAGS) -mno-sse -o $@_nosse $^ $(LDFLAGS)
+	$(CXX) $(CXXFLAGS) -msse     -o $@_sse    $^ $(LDFLAGS)
+	$(CXX) $(CXXFLAGS) -msse4.2  -o $@_sse42  $^ $(LDFLAGS)
+	$(CXX) $(CXXFLAGS) -mavx2    -o $@_avx    $^ $(LDFLAGS)
 	$(CXX) $(CXXFLAGS) -mavx512f -o $@_avx512 $^ $(LDFLAGS)
 # Cross compile for RISC-V on Gem5
 	$(RISCV_CXX) $(CXXFLAGS) -march=rv64gcv           -o $@_riscv     $^ $(LDFLAGS)
 	$(RISCV_CXX) $(CXXFLAGS) -march=rv64gcv -DUSE_RVV -o $@_riscv_rvv $^ $(LDFLAGS)
-# Xuantie C908v on FPGA
-	$(XUANTIE_CXX) $(CXXFLAGS) -mcpu=c908v           -o $@_c908v_rv  $^ $(LDFLAGS)
-	$(XUANTIE_CXX) $(CXXFLAGS) -mcpu=c908v -DUSE_RVV -o $@_c908v_rvv $^ $(LDFLAGS)
-# Xuantie C906fdv on FPGA
-	$(XUANTIE_CXX) $(CXXFLAGS) -mcpu=c906fdv           -o $@_c906fdv_rv  $^ $(LDFLAGS)
-	$(XUANTIE_CXX) $(CXXFLAGS) -mcpu=c906fdv -DUSE_RVV -o $@_c906fdv_rvv $^ $(LDFLAGS)
-# Xuantie C907fdvm on FPGA
-	$(XUANTIE_CXX) $(CXXFLAGS) -mcpu=c907fdvm           -o $@_c907fdvm_rv  $^ $(LDFLAGS)
-	$(XUANTIE_CXX) $(CXXFLAGS) -mcpu=c907fdvm -DUSE_RVV -o $@_c907fdvm_rvv $^ $(LDFLAGS)
-# Xuantie C920v2 on FPGA
-	$(XUANTIE_CXX) $(CXXFLAGS) -mcpu=c920v2           -o $@_c920v2_rv  $^ $(LDFLAGS)
-	$(XUANTIE_CXX) $(CXXFLAGS) -mcpu=c920v2 -DUSE_RVV -o $@_c920v2_rvv $^ $(LDFLAGS)
-# Xuantie C920v3 on FPGA
-	$(XUANTIE_CXX) $(CXXFLAGS) -mcpu=c920v3           -o $@_c920v3_rv  $^ $(LDFLAGS)
-	$(XUANTIE_CXX) $(CXXFLAGS) -mcpu=c920v3 -DUSE_RVV -o $@_c920v3_rvv $^ $(LDFLAGS)
-# Xuantie R908fdv on FPGA
-	$(XUANTIE_CXX) $(CXXFLAGS) -mcpu=r908fdv           -o $@_r908fdv_rv  $^ $(LDFLAGS)
-	$(XUANTIE_CXX) $(CXXFLAGS) -mcpu=r908fdv -DUSE_RVV -o $@_r908fdv_rvv $^ $(LDFLAGS)
+# # Xuantie C908v on FPGA
+# 	$(XUANTIE_CXX) $(CXXFLAGS) -mcpu=c908v           -o $@_c908v_rv  $^ $(LDFLAGS)
+# 	$(XUANTIE_CXX) $(CXXFLAGS) -mcpu=c908v -DUSE_RVV -o $@_c908v_rvv $^ $(LDFLAGS)
+# # Xuantie C906fdv on FPGA
+# 	$(XUANTIE_CXX) $(CXXFLAGS) -mcpu=c906fdv           -o $@_c906fdv_rv  $^ $(LDFLAGS)
+# 	$(XUANTIE_CXX) $(CXXFLAGS) -mcpu=c906fdv -DUSE_RVV -o $@_c906fdv_rvv $^ $(LDFLAGS)
+# # Xuantie C907fdvm on FPGA
+# 	$(XUANTIE_CXX) $(CXXFLAGS) -mcpu=c907fdvm           -o $@_c907fdvm_rv  $^ $(LDFLAGS)
+# 	$(XUANTIE_CXX) $(CXXFLAGS) -mcpu=c907fdvm -DUSE_RVV -o $@_c907fdvm_rvv $^ $(LDFLAGS)
+# # Xuantie C920v2 on FPGA
+# 	$(XUANTIE_CXX) $(CXXFLAGS) -mcpu=c920v2           -o $@_c920v2_rv  $^ $(LDFLAGS)
+# 	$(XUANTIE_CXX) $(CXXFLAGS) -mcpu=c920v2 -DUSE_RVV -o $@_c920v2_rvv $^ $(LDFLAGS)
+# # Xuantie C920v3 on FPGA
+# 	$(XUANTIE_CXX) $(CXXFLAGS) -mcpu=c920v3           -o $@_c920v3_rv  $^ $(LDFLAGS)
+# 	$(XUANTIE_CXX) $(CXXFLAGS) -mcpu=c920v3 -DUSE_RVV -o $@_c920v3_rvv $^ $(LDFLAGS)
+# # Xuantie R908fdv on FPGA
+# 	$(XUANTIE_CXX) $(CXXFLAGS) -mcpu=r908fdv           -o $@_r908fdv_rv  $^ $(LDFLAGS)
+# 	$(XUANTIE_CXX) $(CXXFLAGS) -mcpu=r908fdv -DUSE_RVV -o $@_r908fdv_rvv $^ $(LDFLAGS)
 
 # For Xuantie C910 LicheePi Module 4A
 # $(XUANTIE_CXX) $(CXXFLAGS) -march=rv64gcv0p7           -o $@_xuantie     $^ $(LDFLAGS)

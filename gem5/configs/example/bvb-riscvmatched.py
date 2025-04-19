@@ -45,6 +45,21 @@ from gem5.utils.requires import requires
 
 requires(isa_required=ISA.RISCV)
 
+import argparse
+
+parser = argparse.ArgumentParser()
+parser.add_argument(
+    "--resource",
+    required=False,
+    type=str,
+    default="../test/test_rv",
+)
+parser.add_argument("--prog_args", required=False, nargs="*", default=[])
+
+args = parser.parse_args()
+print("Resource:", args.resource)
+print("Program arguments:", args.prog_args)
+
 # instantiate the riscv matched board with default parameters
 board = RISCVMatchedBoard()
 
@@ -53,12 +68,22 @@ board = RISCVMatchedBoard()
 #     obtain_resource("riscv-hello", resource_version="1.0.0")
 # )
 # binary_path = "~/VDB/hnsw/build/bin/hnsw_search_riscv"
-binary_path = "~/VDB/hnsw/hnsw_search_sifive"
 # binary_path = "~/VDB/hnsw/test/test_rv"
 # binary_path = "~/VDB/hnsw/test/test_rvv"
 # binary_path = "~/VDB/hnsw/test/test"
+# binary_path = "~/VDB/hnsw/hnsw_search_sifive"
+# binary = BinaryResource(binary_path)
+# board.set_se_binary_workload(binary)
+
+binary_path = args.resource
 binary = BinaryResource(binary_path)
-board.set_se_binary_workload(binary)
+print("Binary Path:", binary_path)
+if len(args.prog_args) == 0:
+    binary_args = []
+else:
+    binary_args = args.prog_args[0].split()
+print("Program Arguments for Workload:", binary_args)
+board.set_se_binary_workload(binary=binary, arguments=binary_args)
 
 # run the simulation with the RISCV Matched board
 simulator = Simulator(board=board, full_system=False)

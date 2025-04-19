@@ -128,14 +128,16 @@ class RISCVMatchedCacheHierarchy(
         ]
         self.l1dcaches = [
             L1DCache(
-                size=self._l1d_size, assoc=self._l1d_assoc, response_latency=10
+                # size=self._l1d_size, assoc=self._l1d_assoc, response_latency=10
+                size=self._l1d_size, assoc=self._l1d_assoc, response_latency=5
             )
             for i in range(board.get_processor().get_num_cores())
         ]
         self.l2bus = L2XBar()
 
         self.l2cache = L2Cache(
-            size=self._l2_size, assoc=self._l2_assoc, data_latency=20
+            # size=self._l2_size, assoc=self._l2_assoc, data_latency=20
+            size=self._l2_size, assoc=self._l2_assoc, data_latency=10
         )
 
         # ITLB Page walk caches

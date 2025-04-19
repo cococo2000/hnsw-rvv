@@ -9,7 +9,8 @@ test=100
 
 runs=3
 
-cpu=c908v
+cpu=c910
+# cpu=c908v
 # cpu=c906fdv
 # cpu=c907fdvm
 # cpu=c920v2
@@ -17,7 +18,7 @@ cpu=c908v
 # cpu=r908fdv
 
 rv_program=./build/bin/hnsw_search_${cpu}_rv
-rvv_program=./build/bin/hnsw_search_avx_${cpu}_rvv
+rvv_program=./build/bin/hnsw_search_${cpu}_rvv
 
 # Create logs directory if it doesn't exist
 mkdir -p logs-${cpu}
@@ -37,5 +38,28 @@ for ((i=1; i<=$runs; i++)); do
         done
     done
 done
+
+dataset=./data/ag_news-384-euclidean.bin
+
+mkdir -p logs-ag_news
+
+Ms=(8 16 32 64 128)
+efs=(100 128 200 256 300 400 512)
+
+for ((i=1; i<=$runs; i++)); do
+    for M in "${Ms[@]}"; do
+        for ef in "${efs[@]}"; do
+            echo "Starting run $i"
+            LOG_FILE="logs-ag_news/rvv-M${M}-ef${ef}-run${i}.log"
+            $rvv_program --topk 100 --dataset $dataset --M $M --ef $ef | tee $LOG_FILE
+            sleep 3
+            LOG_FILE="logs-ag_news/rv-M${M}-ef${ef}-run${i}.log"
+            $rv_program --topk 100 --dataset $dataset --M $M --ef $ef | tee $LOG_FILE
+            sleep 3
+            echo "ag_news Completed run $i, log saved to $LOG_FILE"
+        done
+    done
+done
+
 
 # tar -czvf test-xuantie.tar.gz data build bvb-xuantie.sh
