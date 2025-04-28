@@ -76,8 +76,9 @@ $(BIN_DIR)/%: src/%.cpp $(SOURCES_UTILS)
 	$(CXX) $(CXXFLAGS) -mavx2    -o $@_avx    $^ $(LDFLAGS)
 	$(CXX) $(CXXFLAGS) -mavx512f -o $@_avx512 $^ $(LDFLAGS)
 # Cross compile for RISC-V on Gem5
-	$(RISCV_CXX) $(CXXFLAGS) -march=rv64gcv           -o $@_riscv     $^ $(LDFLAGS)
-	$(RISCV_CXX) $(CXXFLAGS) -march=rv64gcv -DUSE_RVV -o $@_riscv_rvv $^ $(LDFLAGS)
+	$(RISCV_CXX) $(CXXFLAGS) -march=rv64gc            -o $@_rv64gc_rv   $^ $(LDFLAGS)
+	$(RISCV_CXX) $(CXXFLAGS) -march=rv64gcv           -o $@_rv64gcv_rv  $^ $(LDFLAGS)
+	$(RISCV_CXX) $(CXXFLAGS) -march=rv64gcv -DUSE_RVV -o $@_rv64gcv_rvv $^ $(LDFLAGS)
 # # Xuantie C908v on FPGA
 # 	$(XUANTIE_CXX) $(CXXFLAGS) -mcpu=c908v           -o $@_c908v_rv  $^ $(LDFLAGS)
 # 	$(XUANTIE_CXX) $(CXXFLAGS) -mcpu=c908v -DUSE_RVV -o $@_c908v_rvv $^ $(LDFLAGS)

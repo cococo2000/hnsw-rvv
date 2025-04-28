@@ -5,49 +5,99 @@
 #include <riscv_vector.h>
 static float
 L2SqrSIMDExtRVV(const void *pVect1v, const void *pVect2v, const void *qty_ptr) {
-    float *pVect1 = (float *) pVect1v;
-    float *pVect2 = (float *) pVect2v;
-    size_t qty = *((size_t *) qty_ptr);
+    // float *pVect1 = (float *) pVect1v;
+    // float *pVect2 = (float *) pVect2v;
+    // size_t qty = *((size_t *) qty_ptr);
     
-    // float sum = 0.0f;
+    // // float sum = 0.0f;
+    // // size_t i = 0;
+    // // while (i < qty) {
+    // //     size_t vl = __riscv_vsetvl_e32m1(qty - i);
+    // //     vfloat32m1_t v1 = __riscv_vle32_v_f32m1(pVect1 + i, vl);
+    // //     vfloat32m1_t v2 = __riscv_vle32_v_f32m1(pVect2 + i, vl);
+    // //     vfloat32m1_t diff = __riscv_vfsub_vv_f32m1(v1, v2, vl);
+    // //     vfloat32m1_t sqr = __riscv_vfmul_vv_f32m1(diff, diff, vl);
+    // //     vfloat32m1_t sum_vec = __riscv_vfredusum_vs_f32m1_f32m1(sqr, __riscv_vfmv_s_f_f32m1(0.0f, 1), vl);
+    // //     sum += __riscv_vfmv_f_s_f32m1_f32(sum_vec);
+    // //     i += vl;
+    // // }
+
+    // // 0404
+    // size_t max_vl = __riscv_vsetvl_e32m1(qty);
     // size_t i = 0;
-    // while (i < qty) {
-    //     size_t vl = __riscv_vsetvl_e32m1(qty - i);
+    // float sum = 0.0f;
+    
+    // for (; i + max_vl <= qty; i += max_vl) {
+    //     vfloat32m1_t v1 = __riscv_vle32_v_f32m1(pVect1 + i, max_vl);
+    //     vfloat32m1_t v2 = __riscv_vle32_v_f32m1(pVect2 + i, max_vl);
+    //     vfloat32m1_t diff = __riscv_vfsub_vv_f32m1(v1, v2, max_vl);
+    //     vfloat32m1_t sqr = __riscv_vfmul_vv_f32m1(diff, diff, max_vl);
+    //     vfloat32m1_t sum_vec = __riscv_vfredusum_vs_f32m1_f32m1(sqr, __riscv_vfmv_s_f_f32m1(0.0f, 1), max_vl);
+    //     sum += __riscv_vfmv_f_s_f32m1_f32(sum_vec);
+    // }
+
+    // if (i < qty) {
+    //     size_t remaining = qty - i;
+    //     size_t vl = __riscv_vsetvl_e32m1(remaining);
     //     vfloat32m1_t v1 = __riscv_vle32_v_f32m1(pVect1 + i, vl);
     //     vfloat32m1_t v2 = __riscv_vle32_v_f32m1(pVect2 + i, vl);
     //     vfloat32m1_t diff = __riscv_vfsub_vv_f32m1(v1, v2, vl);
     //     vfloat32m1_t sqr = __riscv_vfmul_vv_f32m1(diff, diff, vl);
     //     vfloat32m1_t sum_vec = __riscv_vfredusum_vs_f32m1_f32m1(sqr, __riscv_vfmv_s_f_f32m1(0.0f, 1), vl);
     //     sum += __riscv_vfmv_f_s_f32m1_f32(sum_vec);
-    //     i += vl;
     // }
 
-    // 0404
-    size_t max_vl = __riscv_vsetvl_e32m1(qty);
-    size_t i = 0;
-    float sum = 0.0f;
-    
-    for (; i + max_vl <= qty; i += max_vl) {
-        vfloat32m1_t v1 = __riscv_vle32_v_f32m1(pVect1 + i, max_vl);
-        vfloat32m1_t v2 = __riscv_vle32_v_f32m1(pVect2 + i, max_vl);
-        vfloat32m1_t diff = __riscv_vfsub_vv_f32m1(v1, v2, max_vl);
-        vfloat32m1_t sqr = __riscv_vfmul_vv_f32m1(diff, diff, max_vl);
-        vfloat32m1_t sum_vec = __riscv_vfredusum_vs_f32m1_f32m1(sqr, __riscv_vfmv_s_f_f32m1(0.0f, 1), max_vl);
-        sum += __riscv_vfmv_f_s_f32m1_f32(sum_vec);
-    }
+    // return sum;
 
-    if (i < qty) {
-        size_t remaining = qty - i;
-        size_t vl = __riscv_vsetvl_e32m1(remaining);
-        vfloat32m1_t v1 = __riscv_vle32_v_f32m1(pVect1 + i, vl);
-        vfloat32m1_t v2 = __riscv_vle32_v_f32m1(pVect2 + i, vl);
+
+    // 4.20
+    float *a = (float *) pVect1v;
+    float *b = (float *) pVect2v;
+    size_t dim = *((size_t *) qty_ptr);
+
+    // Get the maximum vector length the hardware can handle for float32 with LMUL=1
+    size_t max_vl = __riscv_vsetvlmax_e32m1();
+    size_t i = 0; // Loop counter
+    float sum = 0.0f; // Scalar accumulator for the final sum
+
+    // Initialize a vector register to accumulate sums within the loop
+    vfloat32m1_t vec_sum_acc = __riscv_vfmv_v_f_f32m1(0.0f, max_vl); // Initialize accumulator vector to zeros
+
+    // Main loop: process chunks using vector instructions
+    for (; i < dim; ) {
+        // Set the vector length for this iteration based on remaining elements
+        size_t vl = __riscv_vsetvl_e32m1(dim - i);
+
+        // Load elements from a and b into vector registers
+        vfloat32m1_t v1 = __riscv_vle32_v_f32m1(a + i, vl);
+        vfloat32m1_t v2 = __riscv_vle32_v_f32m1(b + i, vl);
+
+        // Calculate difference: diff = v1 - v2
         vfloat32m1_t diff = __riscv_vfsub_vv_f32m1(v1, v2, vl);
+
+        // Calculate square of difference: sqr = diff * diff
+        // Alternatively, use vfmac/vfmacc for fused multiply-accumulate if accumulating directly
         vfloat32m1_t sqr = __riscv_vfmul_vv_f32m1(diff, diff, vl);
-        vfloat32m1_t sum_vec = __riscv_vfredusum_vs_f32m1_f32m1(sqr, __riscv_vfmv_s_f_f32m1(0.0f, 1), vl);
-        sum += __riscv_vfmv_f_s_f32m1_f32(sum_vec);
+
+        // Accumulate the squares within the vector register
+        vec_sum_acc = __riscv_vfadd_vv_f32m1(vec_sum_acc, sqr, vl);
+
+        // Move to the next chunk
+        i += vl;
     }
 
-    return sum;
+    // Perform final reduction of the accumulated vector sum after the loop
+    // Initialize a scalar target vector (element 0 will hold the result)
+    vfloat32m1_t scalar_sum_vec = __riscv_vfmv_s_f_f32m1(0.0f, max_vl); 
+    // Reduce vec_sum_acc into the first element of scalar_sum_vec
+    scalar_sum_vec = __riscv_vfredusum_vs_f32m1_f32m1(vec_sum_acc, scalar_sum_vec, max_vl); 
+    // Extract the scalar result from the first element
+    sum = __riscv_vfmv_f_s_f32m1_f32(scalar_sum_vec); 
+
+    // Note: The loop structure with vsetvl handles the tail automatically.
+    // The previous tail processing logic is integrated into the main loop.
+
+    return sum; // Return the final L2 squared distance
 }
 #endif
 
